@@ -1,3 +1,4 @@
+/* eslint arrow-parens: ["error", "as-needed"]*/
 const http = require('http'); // built in http module
 const fs = require('fs');
 // built in path module for filesystem and path related functionalities
@@ -5,7 +6,7 @@ const path = require('path');
 // Add-on mime module to derive mime based extensions
 const mime = require('mime');
 // Object to store cached files
-let cache = {};
+const cache = {};
 
 const chatServer = require('./lib/chat_server');
 
@@ -35,7 +36,7 @@ const sendFile = (response, filePath, fileContents) => {
  * a helper function for providing data either from cache if available
  * else from disk and also caching in the process
  */
-const serverStatic = (response, cache, absPath) => {
+const serverStatic = (response, absPath) => {
   // Check if file exists in cache memory
   if (cache[absPath]) {
     // Serve file from cache memorys
@@ -65,13 +66,13 @@ const serverStatic = (response, cache, absPath) => {
  */
 const server = http.createServer((request, response) => {
   let filePath = false;
-  if (request.url == '/') {
+  if (request.url === '/') {
     filePath = 'public/index.html';
   } else {
     filePath = `public${request.url}`;
   }
   const absPath = `./${filePath}`;
-  serverStatic(response, cache, absPath);
+  serverStatic(response, absPath);
 });
 
 server.listen(3000, () => {
