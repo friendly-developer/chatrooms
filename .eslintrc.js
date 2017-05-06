@@ -1,8 +1,6 @@
-{
+module.exports = {
     "extends": "airbnb-base",
     "plugins": [
         "import"
-    ],
-    "linebreak-style":"windows"
-
-}
+    ]
+};
