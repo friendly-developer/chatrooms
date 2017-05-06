@@ -7,11 +7,13 @@ const mime = require('mime');
 // Object to store cached files
 let cache = {};
 
+const chatServer = require('./lib/chat_server');
+
 /**
  * Helper function for handling 404 errors when a file is
  * requested that doesn't exist
  */
-const send404 = (response) => {
+const send404 = response => {
   response.writeHead(404, { 'Content-Type': 'text/plain' });
   response.write('Error 404 : resource not found.');
   response.end();
@@ -40,7 +42,7 @@ const serverStatic = (response, cache, absPath) => {
     sendFile(response, absPath, cache[absPath]);
   } else {
     // check if file exists
-    fs.exists(absPath, (exists) => {
+    fs.exists(absPath, exists => {
       if (exists) {
         fs.readFile(absPath, (err, data) => {
           if (err) {
@@ -75,3 +77,6 @@ const server = http.createServer((request, response) => {
 server.listen(3000, () => {
   console.log('server just started on port 3000');
 });
+
+// listening for chat actions
+chatServer.listen(server);
