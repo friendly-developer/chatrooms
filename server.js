@@ -11,7 +11,7 @@ let cache = {};
  * Helper function for handling 404 errors when a file is
  * requested that doesn't exist
  */
-const send404 = response => {
+const send404 = (response) => {
   response.writeHead(404, { 'Content-Type': 'text/plain' });
   response.write('Error 404 : resource not found.');
   response.end();
@@ -24,7 +24,7 @@ const send404 = response => {
  */
 const sendFile = (response, filePath, fileContents) => {
   response.writeHead(200, {
-    'Content-Type': mime.lookup(path.basename(filePath))
+    'Content-Type': mime.lookup(path.basename(filePath)),
   });
   response.end(fileContents);
 };
@@ -40,7 +40,7 @@ const serverStatic = (response, cache, absPath) => {
     sendFile(response, absPath, cache[absPath]);
   } else {
     // check if file exists
-    fs.exists(absPath, exists => {
+    fs.exists(absPath, (exists) => {
       if (exists) {
         fs.readFile(absPath, (err, data) => {
           if (err) {
@@ -56,3 +56,22 @@ const serverStatic = (response, cache, absPath) => {
     });
   }
 };
+
+/**
+ * Server Object which listens for request and provides appropriate
+ * response using helper functions
+ */
+const server = http.createServer((request, response) => {
+  let filePath = false;
+  if (request.url == '/') {
+    filePath = 'public/index.html';
+  } else {
+    filePath = `public${request.url}`;
+  }
+  const absPath = `./${filePath}`;
+  serverStatic(response, cache, absPath);
+});
+
+server.listen(3000, () => {
+  console.log('server just started on port 3000');
+});
