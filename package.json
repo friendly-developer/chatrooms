@@ -1,0 +1,31 @@
+{
+  "name": "chatrooms",
+  "version": "0.0.1",
+  "description": "Minimalist multiroom chat server",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gvsvarun/full-stack-app.git"
+  },
+  "keywords": [
+    "chatroom",
+    "nodejs",
+    "javascript",
+    "server",
+    "mime",
+    "socket"
+  ],
+  "author": "Varun G",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gvsvarun/full-stack-app/issues"
+  },
+  "homepage": "https://github.com/gvsvarun/full-stack-app#readme",
+  "dependencies": {
+    "mime": "^1.3.4",
+    "socket.io": "^1.7.3"
+  }
+}
