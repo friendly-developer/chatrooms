@@ -11,20 +11,48 @@ let cache = {};
  * Helper function for handling 404 errors when a file is
  * requested that doesn't exist
  */
-const send404 = (response) =>{
-  response.writeHead(404, {'Content-Type':'text/plain'});
+const send404 = response => {
+  response.writeHead(404, { 'Content-Type': 'text/plain' });
   response.write('Error 404 : resource not found.');
   response.end();
-}
+};
 
 /**
  * Helper function to serve file data.
  * Function writes the appropriate HTTP headers and then
  * sends the contents of the file
  */
-const sendFile = (response, filePath, fileContents) = {
-  response.writeHead(200,
-    {'Content-Type':mime.lookup(path.basename(filePath))}
-  );
+const sendFile = (response, filePath, fileContents) => {
+  response.writeHead(200, {
+    'Content-Type': mime.lookup(path.basename(filePath))
+  });
   response.end(fileContents);
-}
+};
+
+/**
+ * a helper function for providing data either from cache if available
+ * else from disk and also caching in the process
+ */
+const serverStatic = (response, cache, absPath) => {
+  // Check if file exists in cache memory
+  if (cache[absPath]) {
+    // Serve file from cache memorys
+    sendFile(response, absPath, cache[absPath]);
+  } else {
+    // check if file exists
+    fs.exists(absPath, exists => {
+      if (exists) {
+        fs.readFile(absPath, (err, data) => {
+          if (err) {
+            send404(response);
+          } else {
+            cache[absPath] = data;
+            sendFile(response, absPath, data);
+          }
+        });
+      } else {
+        send404(response);
+      }
+    });
+  }
+};
