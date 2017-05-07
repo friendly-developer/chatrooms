@@ -41,8 +41,8 @@ const init = (chatApp, socket) => {
     const $roomList = $('#room-list');
     $roomList.empty();
     Object.keys(rooms).forEach(room => {
-      let $room = room;
-      $room = $room.substring(1, room.length);
+      let $room = rooms[room];
+      $room = $room.substring(1, rooms[room].length);
       if ($room !== '') {
         $roomList.append(divEscapedContentElement($room));
       }
